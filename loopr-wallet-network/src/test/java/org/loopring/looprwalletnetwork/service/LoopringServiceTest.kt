@@ -176,13 +176,13 @@ class LoopringServiceTest {
         Assert.assertEquals("0xe85590c6ac6096de02a4b1b1cf57fe2980c483d9a9a8eebdddbdbccc21445cd6",result.orders?.get(0)?.originalOrder?.hash)
         Assert.assertEquals("LRC",result.orders?.get(0)?.originalOrder?.toSell)
         Assert.assertEquals("VITE",result.orders?.get(0)?.originalOrder?.toBuy)
-        Assert.assertEquals(BigInteger("0x3e1b0038be886c60000",16),result.orders?.get(0)?.originalOrder?.amtToSell)
-        Assert.assertEquals(BigInteger("0xe605303a75d35880000",16),result.orders?.get(0)?.originalOrder?.amtToBuy)
-        Assert.assertEquals("0x5af8ed0c",result.orders?.get(0)?.originalOrder?.validSince)
-        Assert.assertEquals("0x5afa3e8c",result.orders?.get(0)?.originalOrder?.validUntil)
-        Assert.assertEquals("0x1fcc27bc459d20000",result.orders?.get(0)?.originalOrder?.lrcFee)
+        Assert.assertEquals(BigInteger("3e1b0038be886c60000",16),result.orders?.get(0)?.originalOrder?.amtToSell)
+        Assert.assertEquals(BigInteger("e605303a75d35880000",16),result.orders?.get(0)?.originalOrder?.amtToBuy)
+        Assert.assertEquals(Date(BigInteger("5af8ed0c",16).toLong()),result.orders?.get(0)?.originalOrder?.validSince)
+        Assert.assertEquals(Date(BigInteger("5afa3e8c",16).toLong()),result.orders?.get(0)?.originalOrder?.validUntil)
+        Assert.assertEquals(BigInteger("1fcc27bc459d20000",16),result.orders?.get(0)?.originalOrder?.lrcFee)
         Assert.assertEquals(true,result.orders?.get(0)?.originalOrder?.buyNoMoreThanBuyAmt)
-        Assert.assertEquals("0x32",result.orders?.get(0)?.originalOrder?.marginSplitPercentage)
+        Assert.assertEquals(Integer.parseInt("32",16),result.orders?.get(0)?.originalOrder?.marginSplitPercentage)
         Assert.assertEquals("0x1c",result.orders?.get(0)?.originalOrder?.v)
         Assert.assertEquals("0x415b91b4277947ac92a422d73528622f71075940b622487ac4ee0fabe2fbd326",result.orders?.get(0)?.originalOrder?.r)
         Assert.assertEquals("0x618e2ce5a0cf7f9fa5ee3c486369125eb812ce135ed69e024c8ea7bcd8c3e242",result.orders?.get(0)?.originalOrder?.s)
@@ -193,7 +193,6 @@ class LoopringServiceTest {
         Assert.assertEquals("buy",result.orders?.get(0)?.originalOrder?.side)
         Assert.assertEquals(Date(1526263146),result.orders?.get(0)?.originalOrder?.createTime)
         Assert.assertEquals("market_order",result.orders?.get(0)?.originalOrder?.orderType)
-
     }
 
     /**
@@ -203,18 +202,52 @@ class LoopringServiceTest {
      */
     @Test
     fun getOrders_shouldWorkLive() = runBlocking {
-        val deferred = serviceLive.getOrders("0x847983c3a34afa192cfee860698584c030f4c9db1",
-                "0xf0b75ed18109403b88713cd7a1a8423352b9ed9260e39cb1ea0f423e2b6664f0",
-                "ORDER_CANCEL",
-                "cross-weth",
+        val deferred = serviceLive.getOrders(null,
+                null,
+                LooprOrderList.ORDER_FINISHED,
+                null,
                 "buy",
-                2,
-                40
+                1,
+                1
         )
 
         val result = deferred.await()
-        Assert.assertEquals(serviceLive.id, result.id)
-        Assert.assertEquals(serviceLive.jsonRpcVersion, result.jsonrpc)
+        Assert.assertNotNull(result.id)
+        Assert.assertNotNull(result.jsonrpc)
+        Assert.assertNotNull(result.pageIndex)
+        Assert.assertNotNull(result.pageSize)
+        Assert.assertNotNull(result.total)
+        Assert.assertNotNull(result.orders)
+        Assert.assertNotNull(result.orders?.get(0))
+        Assert.assertNotNull(result.orders?.get(0)?.dealtAmountToSell)
+        Assert.assertNotNull(result.orders?.get(0)?.dealtAmountToBuy)
+        Assert.assertNotNull(result.orders?.get(0)?.cancelledAmountToSell)
+        Assert.assertNotNull(result.orders?.get(0)?.cancelledAmountToBuy)
+        Assert.assertNotNull(result.orders?.get(0)?.status)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.protocol)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.delegateAddress)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.address)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.hash)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.toSell)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.toBuy)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.amtToSell)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.amtToBuy)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.validSince)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.validUntil)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.lrcFee)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.buyNoMoreThanBuyAmt)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.marginSplitPercentage)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.v)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.r)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.s)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.walletAddress)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.authAddr)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.authPrivateKey)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.market)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.side)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.createTime)
+        Assert.assertNotNull(result.orders?.get(0)?.originalOrder?.orderType)
     }
 
     /**

@@ -246,11 +246,11 @@ open class LooprOrder : RealmObject() {
                 }
 
                 jsonObj.get("validSince")?.let {
-                    order.validSince = context.deserialize(it, Date::class.java)
+                    order.validSince = Date(BigInteger(it.asString.substring(2),16).toLong())
                 }
 
                 jsonObj.get("validUntil")?.let {
-                    order.validUntil = context.deserialize(it, Date::class.java)
+                    order.validUntil = Date(BigInteger(it.asString.substring(2),16).toLong())
                 }
 
                 jsonObj.get("lrcFee")?.let {
@@ -258,7 +258,7 @@ open class LooprOrder : RealmObject() {
                 }
 
                 jsonObj.get("lrcFee")?.let {
-                    order.mLrcFee = it.asString
+                    order.mLrcFee = it.asString.substring(2)
                 }
 
                 jsonObj.get("market")?.let {
